@@ -2,7 +2,6 @@
   "name": "komplier-agents",
   "version": "1.0.0",
   "description": "Autonomous AI Support Agent for Komplier.co - Node.js Implementation",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vercel dev",

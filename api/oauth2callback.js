@@ -4,7 +4,7 @@
  * Simple, clean OAuth callback endpoint for Google Workspace authentication
  */
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
     // Parse URL parameters - use req.query instead of URL parsing
     const { code, error, state } = req.query;
