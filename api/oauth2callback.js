@@ -4,6 +4,53 @@
  * Simple, clean OAuth callback endpoint for Google Workspace authentication
  */
 
+const fetch = require('node-fetch');
+
+/**
+ * Exchange authorization code for access tokens
+ */
+async function exchangeCodeForTokens(code) {
+  try {
+    const response = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+        code: code,
+        grant_type: 'authorization_code',
+        redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI || 'https://komplier-agents.vercel.app/oauth2callback'
+      })
+    });
+
+    const tokenData = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        accessToken: tokenData.access_token,
+        refreshToken: tokenData.refresh_token,
+        expiresIn: tokenData.expires_in,
+        scopes: tokenData.scope,
+        tokenType: tokenData.token_type
+      };
+    } else {
+      return {
+        success: false,
+        error: tokenData.error_description || tokenData.error || 'Token exchange failed'
+      };
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
 module.exports = async function handler(req, res) {
   try {
     // Parse URL parameters - use req.query instead of URL parsing
@@ -41,17 +88,31 @@ module.exports = async function handler(req, res) {
       project: 'komplier-agents'
     };
 
-    // In production, you would save this to a database or secure storage
-    // For now, we'll just log it and show success
-    console.log('✅ OAuth authorization successful:', {
-      codeLength: code.length,
-      email: authData.email,
-      timestamp: authData.timestamp
-    });
-
-    // Return success page
-    res.status(200).setHeader('Content-Type', 'text/html');
-    return res.send(generateSuccessPage(authData));
+    // Exchange authorization code for access tokens
+    const tokenData = await exchangeCodeForTokens(code);
+    
+    if (tokenData.success) {
+      // Store tokens in Vercel KV or environment (for now, we'll log them)
+      console.log('✅ OAuth tokens received:', {
+        hasAccessToken: !!tokenData.accessToken,
+        hasRefreshToken: !!tokenData.refreshToken,
+        scopes: tokenData.scopes,
+        email: authData.email,
+        timestamp: authData.timestamp
+      });
+      
+      // Return success page
+      res.status(200).setHeader('Content-Type', 'text/html');
+      return res.send(generateSuccessPage({
+        ...authData,
+        tokensReceived: true,
+        scopes: tokenData.scopes
+      }));
+    } else {
+      console.error('❌ Token exchange failed:', tokenData.error);
+      res.status(400).setHeader('Content-Type', 'text/html');
+      return res.send(generateErrorPage('Token Exchange Failed', tokenData.error));
+    }
 
   } catch (error) {
     console.error('OAuth callback error:', error);

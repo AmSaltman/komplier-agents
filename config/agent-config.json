@@ -20,18 +20,19 @@
       "command": "uvx",
       "args": ["workspace-mcp"],
       "env": {
-        "GOOGLE_OAUTH_CLIENT_ID": "your_oauth_client_id_here",
-        "GOOGLE_OAUTH_CLIENT_SECRET": "your_oauth_client_secret_here",
-        "USER_GOOGLE_EMAIL": "zach@komplier.co",
-        "GOOGLE_OAUTH_REDIRECT_URI": "https://komplier-agents-oauth-8lksixuva-zachtperrys-projects.vercel.app/oauth2callback"
+        "GOOGLE_OAUTH_CLIENT_ID": "ENV:GOOGLE_OAUTH_CLIENT_ID",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "ENV:GOOGLE_OAUTH_CLIENT_SECRET",
+        "USER_GOOGLE_EMAIL": "ENV:USER_GOOGLE_EMAIL",
+        "GOOGLE_OAUTH_REDIRECT_URI": "ENV:GOOGLE_OAUTH_REDIRECT_URI"
       }
     },
     "supabase": {
-      "type": "subprocess",
+      "type": "subprocess", 
       "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-ref=wigbxjhwjxkhgyouivzp"],
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--url=ENV:SUPABASE_URL"],
       "env": {
-        "SUPABASE_ACCESS_TOKEN": "sbp_b54f30719311f2935feb6566d1a09779cca2cff2"
+        "SUPABASE_ACCESS_TOKEN": "ENV:SUPABASE_ACCESS_TOKEN",
+        "SUPABASE_ANON_KEY": "ENV:SUPABASE_ANON_KEY"
       }
     },
     "stripe": {
