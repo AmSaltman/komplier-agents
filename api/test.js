@@ -1,6 +1,4 @@
 export default function handler(req, res) {
-  return new Response('TEST ENDPOINT WORKING!', {
-    status: 200,
-    headers: { 'Content-Type': 'text/plain' }
-  });
+  res.status(200).setHeader('Content-Type', 'text/plain');
+  return res.send('TEST ENDPOINT WORKING!');
 }
