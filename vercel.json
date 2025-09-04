@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/oauth2callback",
+      "dest": "/api/oauth2callback"
+    },
+    {
+      "src": "/gmail-webhook",
+      "dest": "/api/gmail-webhook"
+    },
+    {
+      "src": "/process-emails",
+      "dest": "/api/process-emails"
+    },
+    {
+      "src": "/send-response", 
+      "dest": "/api/send-response"
+    },
+    {
+      "src": "/daily-report",
+      "dest": "/api/daily-report"
+    },
+    {
+      "src": "/test",
+      "dest": "/api/test"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "LOG_LEVEL": "info"
+  },
+  "regions": ["iad1"]
+}

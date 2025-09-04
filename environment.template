@@ -1,0 +1,41 @@
+# Komplier Autonomous Support Agent - Environment Variables
+# Copy this to .env and fill in your actual values
+
+# =============================================================================
+# GOOGLE WORKSPACE MCP (Gmail, Calendar, Drive)
+# =============================================================================
+GOOGLE_OAUTH_CLIENT_ID=your_oauth_client_id_here
+GOOGLE_OAUTH_CLIENT_SECRET=your_oauth_client_secret_here
+USER_GOOGLE_EMAIL=zach@komplier.co
+GOOGLE_OAUTH_REDIRECT_URI=https://komplier-agents-oauth-8lksixuva-zachtperrys-projects.vercel.app/oauth2callback
+
+# =============================================================================
+# GOOGLE AI (Gemini 2.5 Flash/Pro)
+# =============================================================================
+GOOGLE_AI_API_KEY=your_gemini_api_key_here
+
+# =============================================================================
+# SUPABASE MCP (Database Operations)
+# =============================================================================
+SUPABASE_ACCESS_TOKEN=sbp_b54f30719311f2935feb6566d1a09779cca2cff2
+SUPABASE_PROJECT_REF=wigbxjhwjxkhgyouivzp
+SUPABASE_URL=https://wigbxjhwjxkhgyouivzp.supabase.co
+SUPABASE_ANON_KEY=your_supabase_anon_key_here
+
+# =============================================================================
+# STRIPE MCP (Billing & Subscriptions)
+# =============================================================================
+STRIPE_API_KEY=your_stripe_secret_key_here
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret_here
+
+# =============================================================================
+# AGENT CONFIGURATION
+# =============================================================================
+LOG_LEVEL=info
+NODE_ENV=production
+
+# =============================================================================
+# VERCEL DEPLOYMENT
+# =============================================================================
+VERCEL_PROJECT_ID=your_vercel_project_id
+VERCEL_ORG_ID=your_vercel_org_id

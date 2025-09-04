@@ -1,0 +1,78 @@
+{
+  "ai": {
+    "provider": "gemini",
+    "model": "gemini-2.5-flash",
+    "temperature": 0.3,
+    "maxTokens": 20000
+  },
+  "email": {
+    "supportInbox": "zach@komplier.co",
+    "supportAliases": ["gethelp@komplier.co"],
+    "adminEmail": "zach@thecorner.ai",
+    "mode": "push_notifications",
+    "replyThreading": true,
+    "removeMarkdown": true,
+    "markAsRead": true
+  },
+  "mcpServers": {
+    "googleWorkspace": {
+      "type": "subprocess",
+      "command": "uvx",
+      "args": ["workspace-mcp"],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "your_oauth_client_id_here",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "your_oauth_client_secret_here",
+        "USER_GOOGLE_EMAIL": "zach@komplier.co",
+        "GOOGLE_OAUTH_REDIRECT_URI": "https://komplier-agents-oauth-8lksixuva-zachtperrys-projects.vercel.app/oauth2callback"
+      }
+    },
+    "supabase": {
+      "type": "subprocess",
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-ref=wigbxjhwjxkhgyouivzp"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "sbp_b54f30719311f2935feb6566d1a09779cca2cff2"
+      }
+    },
+    "stripe": {
+      "type": "http",
+      "url": "https://mcp.stripe.com"
+    }
+  },
+  "businessRules": {
+    "refunds": {
+      "autoApproveConditions": {
+        "compliantAssetsMax": 5,
+        "completedProjectsMax": 0,
+        "daysSinceSignupMax": 30
+      },
+      "refundAmountDefault": 499.00
+    },
+    "escalation": {
+      "aiConfidenceThreshold": 0.3,
+      "keywords": ["legal", "complaint", "urgent", "ceo"],
+      "sentimentThreshold": -0.8
+    },
+    "generalResponse": {
+      "defaultResponseType": "helpful_info"
+    }
+  },
+  "knowledgeBase": {
+    "jsonPath": "../koard/public/JSON_References",
+    "files": [
+      "App_Context_Guide.json",
+      "Global_Asset_Guidelines.json", 
+      "Website_Product_Page.json",
+      "Press_Release_Copy.json",
+      "SEO_Copy.json"
+    ]
+  },
+  "scheduling": {
+    "dailyReportTime": "18:00",
+    "healthCheckInterval": 300
+  },
+  "logging": {
+    "level": "info",
+    "format": "json"
+  }
+}
