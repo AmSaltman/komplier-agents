@@ -24,6 +24,10 @@
     {
       "src": "/test",
       "dest": "/api/test"
+    },
+    {
+      "src": "/simple-test",
+      "dest": "/api/simple-test"
     }
   ],
   "env": {
