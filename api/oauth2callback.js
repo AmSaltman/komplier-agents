@@ -6,11 +6,8 @@
 
 export default async function handler(req, res) {
   try {
-    // Parse URL parameters
-    const url = new URL(req.url, `https://${req.headers.host}`);
-    const code = url.searchParams.get('code');
-    const error = url.searchParams.get('error');
-    const state = url.searchParams.get('state');
+    // Parse URL parameters - use req.query instead of URL parsing
+    const { code, error, state } = req.query;
 
     // Log the callback attempt
     console.log('OAuth callback received:', {
@@ -23,19 +20,15 @@ export default async function handler(req, res) {
     // Handle OAuth errors
     if (error) {
       console.error('OAuth error:', error);
-      return new Response(generateErrorPage('Authorization Failed', `OAuth Error: ${error}`), {
-        status: 400,
-        headers: { 'Content-Type': 'text/html' }
-      });
+      res.status(400).setHeader('Content-Type', 'text/html');
+      return res.send(generateErrorPage('Authorization Failed', `OAuth Error: ${error}`));
     }
 
     // Handle missing authorization code
     if (!code) {
       console.error('No authorization code received');
-      return new Response(generateErrorPage('No Authorization Code', 'Google did not provide an authorization code.'), {
-        status: 400,
-        headers: { 'Content-Type': 'text/html' }
-      });
+      res.status(400).setHeader('Content-Type', 'text/html');
+      return res.send(generateErrorPage('No Authorization Code', 'Google did not provide an authorization code.'));
     }
 
     // Store the authorization code and metadata
@@ -57,17 +50,13 @@ export default async function handler(req, res) {
     });
 
     // Return success page
-    return new Response(generateSuccessPage(authData), {
-      status: 200,
-      headers: { 'Content-Type': 'text/html' }
-    });
+    res.status(200).setHeader('Content-Type', 'text/html');
+    return res.send(generateSuccessPage(authData));
 
   } catch (error) {
     console.error('OAuth callback error:', error);
-    return new Response(generateErrorPage('OAuth Callback Failed', error.message), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html' }
-    });
+    res.status(500).setHeader('Content-Type', 'text/html');
+    return res.send(generateErrorPage('OAuth Callback Failed', error.message));
   }
 }
 
